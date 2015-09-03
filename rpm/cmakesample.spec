@@ -41,7 +41,7 @@ rm -rf rpmbuilddir
 mkdir rpmbuilddir
 cd rpmbuilddir &&  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr ..
 cd ..
-make -C rpmbuilddir -j %{?_smp_mflags}
+make -C rpmbuilddir -j VERBOSE=1 %{?_smp_mflags}
 # << build pre
 
 

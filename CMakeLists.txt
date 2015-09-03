@@ -9,11 +9,10 @@ pkg_search_module(SAILFISH sailfishapp REQUIRED)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-#broken
-#add_definitions(${SAILFISH_INCLUDE_DIRS})
-add_definitions(-I/usr/include/sailfishapp)
-
 add_executable(cmakesample main.cpp)
+set_property(TARGET cmakesample
+  PROPERTY INCLUDE_DIRECTORIES
+  INCLUDE_DIRECTORIES "${SAILFISH_INCLUDE_DIRS}")
 qt5_use_modules(cmakesample Qml)
 target_link_libraries(cmakesample ${SAILFISH_LDFLAGS})
 
