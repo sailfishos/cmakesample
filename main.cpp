@@ -32,9 +32,24 @@
 #include <QtQuick>
 #endif
 
+#ifdef SAILFISHAPP
 //FIXME, get path properly.
 #include <sailfishapp.h>
+#else
+#include <QGuiApplication>
+#include <QQmlEngine>
+#include <QQuickView>
+#include <QUrl>
+#endif
 
+#ifdef HAS_BOOSTER
+// use SailfishOS booster (see desktop file)
+// X-Nemo-Application-Type=silica-qt5
+#include <QScopedPointer>
+#include <MDeclarativeCache>
+#endif
+
+#ifdef SAILFISHAPP // Example 1: use libsailfishapp
 int main(int argc, char *argv[])
 {
     // SailfishApp::main() will display "qml/cmakesample.qml", if you need more
@@ -49,3 +64,35 @@ int main(int argc, char *argv[])
     return SailfishApp::main(argc, argv);
 }
 
+#else // Example 2: generic example without using libsailfishapp
+Q_DECL_EXPORT int main(int argc, char *argv[])
+{
+#ifdef HAS_BOOSTER
+    QScopedPointer<QGuiApplication> app_ptr(MDeclarativeCache::qApplication(argc, argv));
+    QGuiApplication& app = *app_ptr;
+    QScopedPointer<QQuickView> view_ptr();
+    QQuickView& view = *view_ptr;
+#else
+    QGuiApplication app(argc, argv);
+    QQuickView view;
+#endif
+
+    app.setOrganizationName(QStringLiteral("cmakesample"));
+    app.setOrganizationDomain(QStringLiteral("cmakesample"));
+    app.setApplicationName(QStringLiteral("cmakesample"));
+    app.setApplicationVersion(QStringLiteral("1.0"));
+
+    // this allows for translucency in your main view
+    QQuickWindow::setDefaultAlphaBuffer(true);
+
+    QQmlEngine& engine = *(view.engine());
+    QObject::connect(&engine, &QQmlEngine::quit, &app, &QGuiApplication::quit);
+    engine.addImportPath("/usr/share/cmakesample/qml");
+
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.setSource(QUrl::fromLocalFile("/usr/share/cmakesample/qml/cmakesample_generic.qml"));
+    view.showFullScreen();
+
+    return app.exec();
+}
+#endif
