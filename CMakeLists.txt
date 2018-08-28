@@ -5,7 +5,6 @@ find_package (Qt5 COMPONENTS Core Network Qml Gui Quick REQUIRED)
 
 include(FindPkgConfig)
 pkg_search_module(SAILFISH sailfishapp REQUIRED)
-add_definitions(-DSAILFISHAPP)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
