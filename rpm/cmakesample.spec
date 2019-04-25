@@ -35,12 +35,26 @@ custom build system
 # >> setup
 # << setup
 
+%bcond_without sailfishos
+%bcond_without libsailfishapp
 %build
 # >> build pre
 rm -rf rpmbuilddir
 mkdir rpmbuilddir
-cd rpmbuilddir &&  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr ..
-cd ..
+cd rpmbuilddir && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr \
+%if %{with sailfishos}
+  -DSAILFISHOS=ON \
+%else
+  -DSAILFISHOS=OFF \
+%endif
+%if %{with libsailfishapp}
+  -DSAILFISHAPP=ON \
+%else
+  -DSAILFISHAPP=OFF \
+%endif
+  ..
+
+cd .. \
 make -C rpmbuilddir -j VERBOSE=1 %{?_smp_mflags}
 # << build pre
 

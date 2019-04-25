@@ -1,5 +1,8 @@
 [Desktop Entry]
 Type=Application
+# Note:
+# Example 2 currently requires the declarative booster to be disabled.
+# Comment the following line to make it work.
 X-Nemo-Application-Type=silica-qt5
 Icon=cmakesample
 Exec=cmakesample
