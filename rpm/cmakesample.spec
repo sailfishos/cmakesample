@@ -37,11 +37,8 @@ custom build system
 
 %build
 # >> build pre
-rm -rf rpmbuilddir
-mkdir rpmbuilddir
-cd rpmbuilddir &&  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr ..
-cd ..
-make -C rpmbuilddir -j VERBOSE=1 %{?_smp_mflags}
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr
+make
 # << build pre
 
 
@@ -51,7 +48,7 @@ make -C rpmbuilddir -j VERBOSE=1 %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 # >> install pre
-DESTDIR=%{buildroot} make -C rpmbuilddir install
+DESTDIR=%{buildroot} make install
 mkdir -p %{_bindir}
 # << install pre
 
